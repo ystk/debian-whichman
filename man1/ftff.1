@@ -1,0 +1,143 @@
+.\"
+.\"     This is free software and distributed under the
+.\"     terms of the Gnu Public License.
+.\"
+.TH FTFF 1 "August 1998" "Search utilities"  \" -*- nroff -*-
+.SH NAME
+ftff \- fault tolerant file find utiltiy
+.SH SYNOPSIS
+.B ftff
+[\-#fFhIpq][\-t#][start_directory] file_to_find
+.SH DESCRIPTION
+.B ftff
+recursively descends the directory hierarchy and reports
+all objects in the file system with a name that approximately
+matches the given filename.
+.PP
+.B ftff
+achieves  fault tolerance  by calculating the  so called
+Weighted Levenshtein Distance. The Levenshtein Distance
+is defined as the  minimum  number of  character insertions,
+deletions and replacements that transform 
+a string 
+.I A 
+into a string 
+.I B.
+.PP
+.B ftff
+behaves like 
+.PP
+.RB 'find\ start_directory\ \-name\ file_to_find\ \-print' 
+.PP
+with the following differences:
+.TP
+\- 
+ftff is fault tolerant
+.TP
+\- 
+ftff is NOT case sensitive
+.TP
+\- 
+the level of fault tolerance can be adjusted by specifying the optional parameter 
+.B tolerance.
+A 
+.B tolerance
+of 0 specifies exact match.
+.SH OPTIONS
+.TP
+.I \-h
+Prints a little help/usage information.
+.TP
+.I \-f
+Follow symbolic links on directories. Note: a symbolic link
+like "somewhere \-> .."  causes naturally an endless loop. 
+By default
+.B ftff
+does not follow symbolic links to directories.
+.TP
+.I \-F
+Classify the file type by appending a character to each file name. This
+character is:
+.br
+.I '*' 
+for regular files that are  executable
+.br
+.I '/' 
+for directories
+.br
+.I '@' 
+for symbolic links
+.br
+.I '|' 
+for FIFOs
+.br
+.I '=' 
+for sockets
+.TP
+.I \-p
+print the actual distance value in front of the filename. This value
+is equal to the number of insertions, deletions and replacements necessary
+to transform the file that was found into the search key (the file_to_find).
+.TP
+.I \-q
+keep quiet and do not print any warning about non readable directories.
+.TP
+.I \-# or \-t#
+Set the fault tolerance level to #.
+The fault tolerance level is an integer in the range 0-255.
+It specifies the maximum number of errors permitted in finding 
+the approximate match. The default tolerance is (strlen(searchpattern) - number of wildcards)/6 + 1
+.TP
+.I \-I
+Do case sensitive search (default is case in-sensitive)
+.PP
+.TP 
+.I file_to_find
+The filename to search for.  
+.RB '*'
+and 
+.RB '?' 
+can be used as wildcards.  
+.br
+.RB '?' 
+denotes one single character.  
+.br 
+.RB '*' 
+denotes an arbitrary number of characters.
+.TP 
+.I start_directory
+The directory to start the search. The current directory is the default. 
+.PP
+The last argument to ftff is not parsed for options as the program needs
+at least one file-name argument. This means that 
+.I ftff -x
+will not complain about a wrong option but search for the file named -x.
+.SH EXAMPLE
+.I  ftff 
+.RB samething
+.PP
+This will e.g. find a file called something or sameting or sum-thing or ...
+.PP
+To find all files that start with any prefix, have something like IOComm in between and end on a two letter suffix:
+.PP
+.I  ftff 
+.RB '*iocomm.??'
+.PP
+To find all files that exactly start with the prefix DuPeg:
+.PP
+.I ftff \-0 
+.RB 'dupeg*' 
+.PP
+.SH BUGS
+The wildcards 
+.BR '?'
+and 
+.BR '*'
+can not be escaped. These characters function always as
+wildcards. This is however not a big problem since there is
+normally hardly any file that has these characters in its name.
+.SH AUTHOR
+Guido Socher (guido@linuxfocus.org)
+.SH SEE ALSO
+whichman(1) find(1)
+

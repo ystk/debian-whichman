@@ -1,0 +1,149 @@
+This package holds THREE little search utilities.
+
+-------------------------------------------------------------
+whichman -- search utility for man pages and it works
+            much like the well known unix command "where".
+
+It shows the the location of a given man-page by looking at
+your MANPATH environment variable. whichman is especially
+useful if you have forgotten the precise name of a
+man-page/command since it performs case in-senstitive
+approximate pattern searches. It does this be computing
+the Levenshtein Distance between the search pattern and
+the man-page name.
+
+Here is a demonstration on how whichman compensates typing errors
+or forgotten command names:
+> whichman erep
+/usr/man/man1/grep.1
+/usr/man/man1/egrep.1
+
+> whichman netwhat
+/usr/man/man8/netstat.8
+
+> whichman print
+/usr/man/man1/printf.1.gz
+/usr/man/man3/printf.3.gz
+/usr/man/man3/rint.3.gz
+
+... or to see in what sections a command is available:
+> whichman -0 exit
+/usr/man/man2/exit.2
+/usr/man/man3/exit.3
+/usr/man/man3/Exit.3
+/usr/man/mann/exit.n
+
+ 
+-------------------------------------------------------------
+ftff -- a fault tolerant file finder
+
+ftff works like the whichman above but searches the directory
+tree. This is a case in-sensitive and fault tolerant way of
+'find . -name xxxx -print'
+-------------------------------------------------------------
+ftwhich -- a fault tolerant "which" command 
+
+ftwhich finds files (programs) which are in one of the directories in 
+your PATH and uses a fault tolerant search algorithem.
+
+Example, search all clocks:
+> ftwhich -0 '*clock*'
+/usr/X11/bin/xclock
+/usr/X11/bin/rclock
+/usr/X11/bin/moonclock
+/usr/X11/bin/oclock
+/usr/X11/bin/xdaliclock
+/usr/openwin/bin/clock
+-------------------------------------------------------------
+
+For further documentation see as well the "find" article
+from LinuxFocus.org:
+http://linuxfocus.org/English/September1998/article64.html
+
+
+-------------------------------------------------------------
+Installation:
+on most systems (especially Linux) you can just type
+make
+make install
+This installes everything into /usr/...
+
+To install into /usr/local you can run
+make  PREFIX=/usr/local install 
+instead.
+
+The above method used the install program. To use normal copy 
+instead you can run:
+make  PREFIX=/usr/local install_with_cp
+
+A spec file to build an rpm-package is also provided.
+
+
+This utility set is free software and comes without any warrenty.
+It falls under the terms of the Gnu Public License (GPL). You can 
+get a copy of the GPL at sunsite.unc.edu /pub/Linux/LICENSES/gpl.license
+
+Regards 
+    Guido Socher
+
+
+
+-------------------------------------------------------------
+History of whichman:
+version 1.0  -first public release
+
+version 1.1  -approximate stringmatch added
+             
+version 1.2  -optimisation in the approximate string match
+             -ftff added
+
+version 1.3  -whichman bug fix. some.page.1 was before this 
+              version read as 'some'
+             -show distance values with option -p
+             -bug fixes in the ftff.1 man page.
+             -option -f for ftff added.
+             
+version 1.4 -ftff bug fix: ftff /home/ something did produce
+1998-04-17   duplicated slashes as e.g /home//xyz/something
+            -whichman, language dependent man pages can now
+             also be searched.
+
+version 1.5 -ftff and whichman: new option parser
+1999-01-29   and new option for case sensitive search.
+            -ftwhich added
+
+version 1.6 -better Makefile
+1999-05-17  -ftwhich: check if this is an executable file.
+            -ftwhich,whichman: better handling of broken path settings
+
+version 1.7 -whichman did seg fault when MANPATH had spaces at the end, fixed
+1999-09-16
+
+version 1.8 -doc for ftff updated. Follow symlink and a symlink to ..
+2000-04-11   causes naturaly an endless loop
+            -option -q to keep ftff quiet when it can not read a directory.
+            -option parser changed to accept -- as argumant to stop
+             option reading.
+            -Now we use option -I instead of -s
+version 1.9 -print version in help text
+2000-05-10  -whichman: accept manpages compressed with bz2
+
+version 2.0 -calculate standard tolerance level with out 
+2001-05-04   taking wildcards into account.
+
+version 2.1 -clean up warnings that you get with modern gcc
+2002-10-07   
+
+version 2.2 -updated specfile
+2003-01-04   
+
+version 2.3 -updated Makefile
+2004-01-19   
+
+version 2.4 -gentoo ebuild file added and Makefile adjusted
+2004-04-14   
+
+-------------------------------------------------------------
+whichman's home is http://main.linuxfocus.org/~guido/
+
+Author: Guido Socher, guido(at)linuxfocus.org

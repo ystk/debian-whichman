@@ -1,0 +1,135 @@
+.\"
+.\"     This is free software and distributed under the
+.\"     terms of the Gnu Public License.
+.\"
+.TH ftwhich 15 "January 1999" "Search utilities"  \" -*- nroff -*-
+.SH NAME
+ftwhich \- fault tolerant search for a command name
+.SH SYNOPSIS
+.B ftwhich
+[\-#hIp][\-t#] program_name
+.SH DESCRIPTION
+.B ftwhich 
+is a fault tolerant version of the which(1) command.
+.B ftwhich
+searches for a given program in all directories included in your 
+PATH environment variable and reports all files with a name that approximately
+matches the given 
+.B program_name.
+.PP
+.B ftwhich
+achieves  fault tolerance  by calculating the  so called
+Weighted Levenshtein Distance. The Levenshtein Distance
+is defined as the  minimum  number of  character insertions,
+deletions and replacements that transform 
+a string 
+.I A 
+into a string 
+.I B.
+.PP
+.I ftwhich
+is similar to the
+.I which 
+command with the following differences:
+.TP
+\- 
+ftwhich is by default NOT case sensitive
+.TP
+\- 
+ftwhich is fault tolerant
+.TP
+\- 
+Some shells have a build in
+.I which
+command that will also search aliases. 
+.I ftwhich 
+can naturaly not search for aliases as it does not know 
+about alias definitions. 
+.TP
+\- 
+.B ftwhich 
+lists all files that approximatly match. The files first
+shown take preference over files of the same name printed later as
+they are from directories listed earlier in the PATH.
+.TP
+\- 
+The level of fault tolerance can be adjusted by specifying the optional parameter 
+.B tolerance.
+A 
+.B tolerance
+of 0 specifies exact match.
+.SH OPTIONS
+.TP
+.I \-h
+Prints help/usage information.
+.TP
+.I \-I
+Do case sensitive search (default is case in\-sensitive)
+.TP
+.I \-p
+print the actual distance value in front of the found filename. This value
+is equal to the number of insertions, deletions and replacements necessary
+to transform the name of the found program into the search key.
+.TP
+.I \-# or \-t#
+Set the fault tolerance level to #.
+The fault tolerance level is an integer in the range 0-255.
+It specifies the maximum number of errors permitted in finding 
+the approximate match. The default tolerance is (strlen(searchpattern) - number of wildcards)/6 + 1
+.PP
+.TP 
+.I program_name
+The program file to search for.  
+.RB '*'
+and 
+.RB '?' 
+can be used as wildcards.  
+.br
+.RB '?'
+denotes one single character.  
+.br 
+.RB '*'
+denotes an arbitrary number of characters.
+.PP
+The last argument to ftwhich is not parsed for options as the program needs
+at least one program_name argument. This means that 
+.I ftwhich -x
+will not complain about a wrong option but search for the program named -x.
+.SH EXAMPLE
+Search for all programs like gcc in your PATH:
+.br
+.I  ftwhich gcc
+.br
+This will e.g. find gcc or cc or CC ...
+.PP
+To find all files that start with any prefix and end in
+.I config 
+and differ in 2 letters from the word 
+.I config:
+.br
+.I  ftwhich \-2
+.RB '*config'
+.PP
+To find all files that exactly start with the prefix 
+.I if:
+.br
+.I ftwhich \-0 
+.RB 'if*' 
+.PP
+To find all clock programs:
+.br
+.I ftwhich \-0 '*clock*'
+.PP
+.SH BUGS
+The wildcards 
+.BR '?'
+and 
+.BR '*'
+can not be escaped. These characters function always as
+wildcards. This is however not a big problem since there is
+normally hardly any command that has these characters in its name.
+.SH AUTHOR
+Guido Socher (guido@linuxfocus.org)
+.SH SEE ALSO
+whichman(1) ftff(1)
+

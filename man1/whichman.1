@@ -1,0 +1,88 @@
+.\"
+.\"     This is free software and only distributed under the
+.\"     terms of the Gnu Public License. Author: Guido Socher
+.\"
+.TH whichman 1 "April 1998" "Search utilities"  \" -*- nroff -*-
+.SH NAME
+whichman \- show the location of a man page using a fault tolerant approximate matching algorithm
+.SH SYNOPSIS
+.B whichman
+[\-#ehIp][\-t#] man\-page\-name 
+.SH DESCRIPTION
+.B whichman 
+is a "which" alike search command for man pages. 
+.B whichman 
+searches the    
+.B MANPATH 
+environment variable. 
+.PP
+Unlike "which" this program does not stop on the first match. The name
+should probably have been something like whereman as this is not a
+"which" at all.  whichman shows all man-pages that match and allows you
+to identify the different sections to which the pages belong.
+.PP
+.B whichman 
+can handle international manpage path names for different languages.
+Man pages in different languages may be stored in .../man/<country_code>/man[1\-9]/...
+.PP
+By default, 
+.B whichman
+does fault tolerant approximate string matching. With a default tolerance level
+of: 
+(strlen(searchpattern) - number of wildcards)/6 + 1
+.SH OPTIONS
+.TP
+.I \-h
+Prints a little help/usage information.
+.TP
+.I \-I
+Do case sensitive search (default is case in\-sensitive)
+.TP
+.I \-e
+Use exact matching when searching 
+for a given man-page and the wildcards * and ? are disabled.
+.TP
+.I \-p
+print the actual tolerance level in front of the man page name.
+.TP
+.I \-# or \-t#
+Set the fault tolerance level to #.  The fault tolerance level is a
+integer # in the range 0-255.  It specifies the maximum number of errors
+permitted in finding the approximate match.  A tolerance_level of zero
+allows exact matches only but does NOT disable the wildcards * and ?.
+.PP
+The search key may contain the wildcards * and ? (but see -e option):
+.TP 
+.BR '*'
+any arbitrary number of character
+.TP 
+.BR '?'
+one character
+.PP
+The last argument to whichman is not parsed for options as the program needs
+at least one man-page-name argument. This means that 
+.I whichman -x
+will not complain about a wrong option but search for the man-page named -x.
+.SH EXAMPLE
+.I  whichman
+.RB print
+.PP
+This will e.g. find the man-pages:
+.br
+/usr/man/man1/printf.1.gz
+.br
+/usr/man/man3/printf.3.gz
+.br
+/usr/man/man3/rint.3.gz
+.SH BUGS
+The wildcards 
+.BR '?'
+and 
+.BR '*'
+can not be escaped. These characters function always as
+wildcards. This is however not a big problem since there is
+hardly any man-page that has these characters in its name.
+.SH AUTHOR
+Guido Socher (guido@linuxfocus.org)
+.SH SEE ALSO
+ftff(1) man(1)

@@ -1,0 +1,30 @@
+Begin3
+Title: whichman, ftff, ftwhich -- Fault tolerant search utilities
+Version: 2.3
+Entered-date: 19JAN04
+Description: whichman uses a fault tolerant approximate matching algorithm
+             to search for man-pages that match approximately the 
+             specified name. It can be used to locate the right page
+             in case the man-page is available in several sections.
+             The fault tolerant matching is very useful in cases where
+             you remember only roughly the name of a command.
+             Example: whichman netwhat   This finds netstat.8:
+             /usr/man/man8/netstat.8
+             The package contains also a fault tolerant file find utility (ftff)
+             and a fault tolerant version of the "which" command (ftwhich).
+             Both use the same algorithm as whichman.
+             The error tolerant approximate string match is based on 
+             the Levenshtein Distance between two strings. This is a 
+             measure for the number of replacements, insertions and
+             deletions that are necessary to transform string A into string B
+Keywords: man, which, search, find
+Author: guido@linuxfocus.org (Guido Socher) 
+Maintained-by: guido(at)linuxfocus.org (Guido Socher)
+Primary-site: www.ibiblio.org /pub/Linux/apps/doctools/
+              1k  whichman-2.2.lsm 
+              19k whichman-2.2.tar.gz
+Original-site: http://main.linuxfocus.org/~guido/
+Platforms: Linux, probably any Unix
+Copying-policy: GPL
+End
+
