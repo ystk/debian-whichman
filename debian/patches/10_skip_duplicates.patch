@@ -1,0 +1,195 @@
+Patch for #452068: wanted: 'ftwhich' option to not print links or symlinks 
+
+diff -Nur whichman-2.4.old/ftwhich.c whichman-2.4/ftwhich.c
+--- whichman-2.4.old/ftwhich.c	2001-05-04 22:56:04.000000000 +0200
++++ whichman-2.4/ftwhich.c	2008-01-27 14:46:54.000000000 +0100
+@@ -11,6 +11,7 @@
+ #include <ctype.h>
+ #include <stdlib.h>
+ #include "levdist.h"
++#include "statduplcheck.h"
+ 
+ static void help();
+ static char **splitpath();
+@@ -125,6 +126,9 @@
+ 		matchfilename(*pathcomp, searchkey);
+ 		pathcomp++;
+ 	}
++
++        free_statduplicates();
++
+ 	return (nomatchfound);
+ }
+ /*__END OF MAIN__*/
+@@ -161,8 +165,9 @@
+         if ((stbuf.st_mode & S_IFREG)==0) return(0);
+         /* test if executable for user or grp or others */
+         if ((stbuf.st_mode & S_IXUSR) || (stbuf.st_mode & S_IXGRP)\
+-                ||(stbuf.st_mode & S_IXOTH)) return(1);
+-        return(0);
++                ||(stbuf.st_mode & S_IXOTH))
++                if (is_statduplicate(&stbuf)) return(0); 
++        return(1);
+ }
+ /*
+  * match all entries in the directory variable path points to
+diff -Nur whichman-2.4.old/Makefile whichman-2.4/Makefile
+--- whichman-2.4.old/Makefile	2008-01-27 14:45:55.000000000 +0100
++++ whichman-2.4/Makefile	2008-01-27 14:46:54.000000000 +0100
+@@ -14,11 +14,11 @@
+ 
+ all:whichman ftff ftwhich
+ 
+-whichman: whichman.o levdist.o
+-	$(CC) -o $@ whichman.o levdist.o
++whichman: whichman.o levdist.o statduplcheck.o
++	$(CC) -o $@ whichman.o levdist.o statduplcheck.o
+ 
+-ftwhich: ftwhich.o levdist.o
+-	$(CC) -o $@ ftwhich.o levdist.o
++ftwhich: ftwhich.o levdist.o statduplcheck.o
++	$(CC) -o $@ ftwhich.o levdist.o statduplcheck.o
+ 
+ ftff: ftff.o levdist.o 
+ 	$(CC) -o $@ ftff.o levdist.o
+@@ -31,6 +31,8 @@
+ 	$(CC) $(CFLAGS) -c ftff.c
+ levdist.o: levdist.c levdist.h
+ 	$(CC) $(CFLAGS) -c levdist.c
++statduplcheck.o: statduplcheck.c statduplcheck.h	
++	$(CC) $(CFLAGS) -c statduplcheck.c
+ 
+ install: whichman ftff ftwhich $(MANP)
+ 	$(STRIP) whichman
+diff -Nur whichman-2.4.old/statduplcheck.c whichman-2.4/statduplcheck.c
+--- whichman-2.4.old/statduplcheck.c	1970-01-01 01:00:00.000000000 +0100
++++ whichman-2.4/statduplcheck.c	2008-01-27 14:46:54.000000000 +0100
+@@ -0,0 +1,84 @@
++#define _GNU_SOURCE   /* for tdestroy */
++#include "statduplcheck.h"
++#include <malloc.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <search.h>
++
++struct stat_info {
++	dev_t     st_dev;   
++	ino_t     st_ino;
++};
++
++static void * info_root = NULL;
++
++/* compare function passed to tsearch */
++static int stat_info_compare(const void *si1, const void * si2)
++{
++	int res;
++	
++	res = ((struct stat_info*)si1)->st_dev - ((struct stat_info*)si2)->st_dev;
++	if (!res)
++		res = ((struct stat_info*)si1)->st_ino - ((struct stat_info*)si2)->st_ino;
++	return res;
++}
++
++int is_statduplicate(const struct stat *st) {
++	static struct stat_info * stinfo = NULL;
++	struct stat_info ** res;
++
++	if (!stinfo) {
++		stinfo = (struct stat_info*) malloc (sizeof(*stinfo));
++
++		if (!stinfo) {
++			fprintf(stderr, "cannot allocate memory\n");
++			exit(1);
++		}
++
++	}
++
++	stinfo->st_dev = st->st_dev;
++	stinfo->st_ino = st->st_ino;
++
++	if (!(res = tsearch(stinfo, &info_root, stat_info_compare))) {
++		fprintf(stderr, "cannot allocate memory\n");
++		exit(1);
++	}
++
++	if (*res == stinfo) {
++		// new record
++		stinfo = NULL;
++		return 0;
++	}		
++
++	return 1;
++}
++
++int is_fileduplicate(const char *dir, const char *name) {
++	static struct stat stbuf;
++	static char fullpath[255];
++
++	if (strlen(dir) + strlen(name) + 2 > sizeof(fullpath)) return (-1);
++	strcpy(fullpath, dir);
++	strcat(fullpath, "/");
++	strcat(fullpath, name);
++
++        if (stat(fullpath,&stbuf)!=0) return(-1); /* file does not exists */
++	
++	return is_statduplicate(&stbuf);
++
++}
++
++void free_statduplicates(void) {
++	
++	if (!info_root)	return;
++
++	tdestroy(info_root, free);
++	info_root = NULL;
++
++}
++
++
++
++
+diff -Nur whichman-2.4.old/statduplcheck.h whichman-2.4/statduplcheck.h
+--- whichman-2.4.old/statduplcheck.h	1970-01-01 01:00:00.000000000 +0100
++++ whichman-2.4/statduplcheck.h	2008-01-27 14:46:54.000000000 +0100
+@@ -0,0 +1,11 @@
++#ifndef STATDUPLCHECK_H
++#define STATDUPLCHECK_H
++
++#include <sys/stat.h>
++
++extern int is_statduplicate(const struct stat *st); 
++extern int is_fileduplicate(const char *dir, const char *name); 
++extern void free_statduplicates(void);
++
++
++#endif
+diff -Nur whichman-2.4.old/whichman.c whichman-2.4/whichman.c
+--- whichman-2.4.old/whichman.c	2008-01-27 14:45:55.000000000 +0100
++++ whichman-2.4/whichman.c	2008-01-27 14:46:54.000000000 +0100
+@@ -11,6 +11,7 @@
+ #include <ctype.h>
+ #include <stdlib.h>
+ #include "levdist.h"
++#include "statduplcheck.h"
+ 
+ static void help();
+ static char **splitman();
+@@ -143,6 +144,8 @@
+ 		findmandir(*pathcomp, searchkey);
+ 		pathcomp++;
+ 	}
++
++        free_statduplicates();
+ 	return (nomanfilefound);
+ }
+ /*__END OF MAIN__*/
+@@ -249,7 +252,7 @@
+                         /* xxxxx.1.gz ->xxxxx :*/
+                         manname=removemanextesions(entry->d_name); 
+                         d=stringmatch(manname,key);
+-                        if (d != -1){
++                        if (d != -1 && !is_fileduplicate(path, entry->d_name) ){
+                                 if (printdist) printf("%03d ",d);
+                                 printf("%s/%s\n", path, entry->d_name);
+                                 nomanfilefound = 0;

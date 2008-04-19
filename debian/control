@@ -1,0 +1,25 @@
+Source: whichman
+Section: utils
+Priority: optional
+Maintainer: Robert Luberda <robert@debian.org>
+Build-Depends: debhelper (>= 6), quilt (>= 0.46)
+Standards-Version: 3.7.3
+
+Package: whichman
+Architecture: any
+Depends: ${shlibs:Depends}
+Description: Fault tolerant search utilities: whichman, ftff, ftwhich
+ whichman uses a fault tolerant approximate matching algorithm to search 
+ for man-pages that match approximately the specified name. 
+ The fault tolerant matching is very useful in cases where you remember only 
+ roughly the name of a command.
+ .
+    Example: whichman netwhat   
+    This finds netstat.8: /usr/share/man/man8/netstat.8
+ .
+ ftff searches the directory tree. This is a case in-sensitive and fault 
+ tolerant way of 'find . -name xxxx -print'.
+ .
+ ftwhich finds files which are in one of the directories in your PATH 
+ and uses a fault tolerant search algorithm.
+Homepage: http://linuxfocus.org/~guido/#whichman

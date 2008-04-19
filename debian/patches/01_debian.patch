@@ -1,0 +1,215 @@
+diff -Nur whichman-2.4.old/Makefile whichman-2.4/Makefile
+--- whichman-2.4.old/Makefile	2004-04-15 04:19:10.000000000 +0200
++++ whichman-2.4/Makefile	2008-01-27 14:45:55.000000000 +0100
+@@ -9,6 +9,8 @@
+ #sun c/c++-compiler:
+ #CC=CC
+ #CFLAGS= -O
++STRIP=strip
++
+ 
+ all:whichman ftff ftwhich
+ 
+@@ -31,9 +33,9 @@
+ 	$(CC) $(CFLAGS) -c levdist.c
+ 
+ install: whichman ftff ftwhich $(MANP)
+-	strip whichman
+-	strip ftwhich
+-	strip ftff
++	$(STRIP) whichman
++	$(STRIP) ftwhich
++	$(STRIP) ftff
+ 	[ -d "$(prefix)/bin" ] || $(INSTALL) -d $(prefix)/bin
+ 	[ -d "$(mandir)/man1" ] || $(INSTALL) -d $(mandir)/man1
+ 	$(INSTALL) -m 755 whichman $(prefix)/bin
+diff -Nur whichman-2.4.old/man1/ftff.1 whichman-2.4/man1/ftff.1
+--- whichman-2.4.old/man1/ftff.1	2001-05-04 23:02:59.000000000 +0200
++++ whichman-2.4/man1/ftff.1	2008-01-27 14:45:55.000000000 +0100
+@@ -4,7 +4,7 @@
+ .\"
+ .TH FTFF 1 "August 1998" "Search utilities"  \" -*- nroff -*-
+ .SH NAME
+-ftff \- fault tolerant file find utiltiy
++ftff \- fault tolerant file find utility
+ .SH SYNOPSIS
+ .B ftff
+ [\-#fFhIpq][\-t#][start_directory] file_to_find
+@@ -110,8 +110,8 @@
+ .PP
+ The last argument to ftff is not parsed for options as the program needs
+ at least one file-name argument. This means that 
+-.I ftff -x
+-will not complain about a wrong option but search for the file named -x.
++.I ftff \-x
++will not complain about a wrong option but search for the file named \-x.
+ .SH EXAMPLE
+ .I  ftff 
+ .RB samething
+@@ -139,5 +139,5 @@
+ .SH AUTHOR
+ Guido Socher (guido@linuxfocus.org)
+ .SH SEE ALSO
+-whichman(1) find(1)
++.BR whichman "(1), " find (1)
+ 
+diff -Nur whichman-2.4.old/man1/ftwhich.1 whichman-2.4/man1/ftwhich.1
+--- whichman-2.4.old/man1/ftwhich.1	2001-05-04 23:03:06.000000000 +0200
++++ whichman-2.4/man1/ftwhich.1	2008-01-27 14:45:55.000000000 +0100
+@@ -2,7 +2,7 @@
+ .\"     This is free software and distributed under the
+ .\"     terms of the Gnu Public License.
+ .\"
+-.TH ftwhich 15 "January 1999" "Search utilities"  \" -*- nroff -*-
++.TH FTWHICH 1 "January 1999" "Search utilities"  \" -*- nroff -*-
+ .SH NAME
+ ftwhich \- fault tolerant search for a command name
+ .SH SYNOPSIS
+@@ -15,7 +15,7 @@
+ searches for a given program in all directories included in your 
+ PATH environment variable and reports all files with a name that approximately
+ matches the given 
+-.B program_name.
++.I program_name.
+ .PP
+ .B ftwhich
+ achieves  fault tolerance  by calculating the  so called
+@@ -27,9 +27,9 @@
+ into a string 
+ .I B.
+ .PP
+-.I ftwhich
++.B ftwhich
+ is similar to the
+-.I which 
++.B which 
+ command with the following differences:
+ .TP
+ \- 
+@@ -40,15 +40,15 @@
+ .TP
+ \- 
+ Some shells have a build in
+-.I which
++.B which
+ command that will also search aliases. 
+-.I ftwhich 
+-can naturaly not search for aliases as it does not know 
++.B ftwhich 
++can naturally not search for aliases as it does not know 
+ about alias definitions. 
+ .TP
+ \- 
+ .B ftwhich 
+-lists all files that approximatly match. The files first
++lists all files that approximately match. The files first
+ shown take preference over files of the same name printed later as
+ they are from directories listed earlier in the PATH.
+ .TP
+@@ -93,8 +93,8 @@
+ .PP
+ The last argument to ftwhich is not parsed for options as the program needs
+ at least one program_name argument. This means that 
+-.I ftwhich -x
+-will not complain about a wrong option but search for the program named -x.
++.I ftwhich \-x
++will not complain about a wrong option but search for the program named \-x.
+ .SH EXAMPLE
+ Search for all programs like gcc in your PATH:
+ .br
+@@ -131,5 +131,5 @@
+ .SH AUTHOR
+ Guido Socher (guido@linuxfocus.org)
+ .SH SEE ALSO
+-whichman(1) ftff(1)
++.BR whichman "(1), " ftff (1)
+ 
+diff -Nur whichman-2.4.old/man1/whichman.1 whichman-2.4/man1/whichman.1
+--- whichman-2.4.old/man1/whichman.1	2001-05-04 23:03:23.000000000 +0200
++++ whichman-2.4/man1/whichman.1	2008-01-27 14:45:55.000000000 +0100
+@@ -2,7 +2,7 @@
+ .\"     This is free software and only distributed under the
+ .\"     terms of the Gnu Public License. Author: Guido Socher
+ .\"
+-.TH whichman 1 "April 1998" "Search utilities"  \" -*- nroff -*-
++.TH WHICHMAN 1 "April 1998" "Search utilities"  \" -*- nroff -*-
+ .SH NAME
+ whichman \- show the location of a man page using a fault tolerant approximate matching algorithm
+ .SH SYNOPSIS
+@@ -15,6 +15,10 @@
+ searches the    
+ .B MANPATH 
+ environment variable. 
++If this variable is not defined, then it uses
++.I "/usr/share/man:/usr/man:/usr/X11R6/man:"
++.I "/usr/local/share/man:/usr/local/man"
++by default.
+ .PP
+ Unlike "which" this program does not stop on the first match. The name
+ should probably have been something like whereman as this is not a
+@@ -51,7 +55,7 @@
+ permitted in finding the approximate match.  A tolerance_level of zero
+ allows exact matches only but does NOT disable the wildcards * and ?.
+ .PP
+-The search key may contain the wildcards * and ? (but see -e option):
++The search key may contain the wildcards * and ? (but see \-e option):
+ .TP 
+ .BR '*'
+ any arbitrary number of character
+@@ -61,19 +65,19 @@
+ .PP
+ The last argument to whichman is not parsed for options as the program needs
+ at least one man-page-name argument. This means that 
+-.I whichman -x
+-will not complain about a wrong option but search for the man-page named -x.
++.I whichman \-x
++will not complain about a wrong option but search for the man-page named \-x.
+ .SH EXAMPLE
+ .I  whichman
+ .RB print
+ .PP
+ This will e.g. find the man-pages:
+ .br
+-/usr/man/man1/printf.1.gz
++/usr/share/man/man1/printf.1.gz
+ .br
+-/usr/man/man3/printf.3.gz
++/usr/share/man/man3/printf.3.gz
+ .br
+-/usr/man/man3/rint.3.gz
++/usr/share/man/man3/rint.3.gz
+ .SH BUGS
+ The wildcards 
+ .BR '?'
+@@ -85,4 +89,4 @@
+ .SH AUTHOR
+ Guido Socher (guido@linuxfocus.org)
+ .SH SEE ALSO
+-ftff(1) man(1)
++.BR ftff "(1), " man (1)
+diff -Nur whichman-2.4.old/README whichman-2.4/README
+--- whichman-2.4.old/README	2004-04-15 04:21:05.000000000 +0200
++++ whichman-2.4/README	2008-01-27 14:45:55.000000000 +0100
+@@ -44,7 +44,7 @@
+ ftwhich -- a fault tolerant "which" command 
+ 
+ ftwhich finds files (programs) which are in one of the directories in 
+-your PATH and uses a fault tolerant search algorithem.
++your PATH and uses a fault tolerant search algorithm.
+ 
+ Example, search all clocks:
+ > ftwhich -0 '*clock*'
+diff -Nur whichman-2.4.old/whichman.c whichman-2.4/whichman.c
+--- whichman-2.4.old/whichman.c	2003-01-04 22:39:47.000000000 +0100
++++ whichman-2.4/whichman.c	2008-01-27 14:45:55.000000000 +0100
+@@ -399,8 +399,8 @@
+ 
+ 	mpath = (char *) getenv("MANPATH");
+ 	if (mpath == NULL || *mpath == '\0') {
+-		fprintf(stderr,"Warning: MANPATH not defined, using /usr/man:/usr/share/man\n");
+-                mpath="/usr/man:/usr/share/man";
++/*		fprintf(stderr,"Warning: MANPATH not defined, using /usr/man:/usr/share/man\n"); */
++                mpath="/usr/share/man:/usr/man:/usr/X11R6/man:/usr/local/man";
+ 	}
+         /* make a copy that is static */
+         cmpath = (char *)malloc(sizeof(char)*(strlen(mpath) + 2));
