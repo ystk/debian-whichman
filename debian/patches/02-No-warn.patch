@@ -1,0 +1,25 @@
+From: Robert Luberda <robert@debian.org>
+Date: Mon, 29 Jan 2001 20:31:00 +0100
+Subject: 02 No warn.
+
+Don't warn about empty  MANPATH. Update man pages path for FHS.
+---
+ whichman.c |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/whichman.c b/whichman.c
+index 931c00d..586f57b 100644
+--- a/whichman.c
++++ b/whichman.c
+@@ -399,8 +399,8 @@ char **splitman()
+ 
+ 	mpath = (char *) getenv("MANPATH");
+ 	if (mpath == NULL || *mpath == '\0') {
+-		fprintf(stderr,"Warning: MANPATH not defined, using /usr/man:/usr/share/man\n");
+-                mpath="/usr/man:/usr/share/man";
++/*		fprintf(stderr,"Warning: MANPATH not defined, using /usr/man:/usr/share/man\n"); */
++                mpath="/usr/share/man:/usr/man:/usr/X11R6/man:/usr/local/man";
+ 	}
+         /* make a copy that is static */
+         cmpath = (char *)malloc(sizeof(char)*(strlen(mpath) + 2));
+-- 

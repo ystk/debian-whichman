@@ -1,4 +1,4 @@
-whichman was debianized by Robert Luberda <robert@debian.org> 
+whichman was debianized by Robert Luberda <robert@debian.org>
 on Thu, 25 Jan 2001 22:29:16 +0100.
 
 whichman's home is ftp://www.ibiblio.org/pub/Linux/apps/doctools/
@@ -12,7 +12,7 @@ Upstream Author: Guido Socher <guido@linuxfocus.org>
 Copyright:
 
   This utility set is free software and comes without any warrenty.
-  It falls under the terms of the Gnu Public License (GPL). You can 
+  It falls under the terms of the GNU General Public License (GPL). You can
   get a copy of the GPL at sunsite.unc.edu /pub/Linux/LICENSES/gpl.license
 
 On Debian GNU/Linux systems, the complete text of the GNU General

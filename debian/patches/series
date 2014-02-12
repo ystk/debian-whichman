@@ -1,2 +1,4 @@
-01_debian.patch
-10_skip_duplicates.patch
+00-Makefile.patch
+01-Documentation.patch
+02-No-warn.patch
+10-Skip-duplicates.patch

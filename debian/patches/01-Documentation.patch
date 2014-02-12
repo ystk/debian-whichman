@@ -1,31 +1,32 @@
-diff -Nur whichman-2.4.old/Makefile whichman-2.4/Makefile
---- whichman-2.4.old/Makefile	2004-04-15 04:19:10.000000000 +0200
-+++ whichman-2.4/Makefile	2008-01-27 14:45:55.000000000 +0100
-@@ -9,6 +9,8 @@
- #sun c/c++-compiler:
- #CC=CC
- #CFLAGS= -O
-+STRIP=strip
-+
+From: Robert Luberda <robert@debian.org>
+Date: Fri, 29 Apr 2005 19:08:00 +0200
+Subject: 01 Documentation.
+
+Fix typos in documentation, update paths for FHS.
+---
+ README          |    2 +-
+ man1/ftff.1     |    8 ++++----
+ man1/ftwhich.1  |   22 +++++++++++-----------
+ man1/whichman.1 |   20 ++++++++++++--------
+ 4 files changed, 28 insertions(+), 24 deletions(-)
+
+diff --git a/README b/README
+index 20e74ba..8c21b4d 100644
+--- a/README
++++ b/README
+@@ -44,7 +44,7 @@ tree. This is a case in-sensitive and fault tolerant way of
+ ftwhich -- a fault tolerant "which" command 
  
- all:whichman ftff ftwhich
+ ftwhich finds files (programs) which are in one of the directories in 
+-your PATH and uses a fault tolerant search algorithem.
++your PATH and uses a fault tolerant search algorithm.
  
-@@ -31,9 +33,9 @@
- 	$(CC) $(CFLAGS) -c levdist.c
- 
- install: whichman ftff ftwhich $(MANP)
--	strip whichman
--	strip ftwhich
--	strip ftff
-+	$(STRIP) whichman
-+	$(STRIP) ftwhich
-+	$(STRIP) ftff
- 	[ -d "$(prefix)/bin" ] || $(INSTALL) -d $(prefix)/bin
- 	[ -d "$(mandir)/man1" ] || $(INSTALL) -d $(mandir)/man1
- 	$(INSTALL) -m 755 whichman $(prefix)/bin
-diff -Nur whichman-2.4.old/man1/ftff.1 whichman-2.4/man1/ftff.1
---- whichman-2.4.old/man1/ftff.1	2001-05-04 23:02:59.000000000 +0200
-+++ whichman-2.4/man1/ftff.1	2008-01-27 14:45:55.000000000 +0100
+ Example, search all clocks:
+ > ftwhich -0 '*clock*'
+diff --git a/man1/ftff.1 b/man1/ftff.1
+index 1c1645d..82f5e50 100644
+--- a/man1/ftff.1
++++ b/man1/ftff.1
 @@ -4,7 +4,7 @@
  .\"
  .TH FTFF 1 "August 1998" "Search utilities"  \" -*- nroff -*-
@@ -35,7 +36,7 @@ diff -Nur whichman-2.4.old/man1/ftff.1 whichman-2.4/man1/ftff.1
  .SH SYNOPSIS
  .B ftff
  [\-#fFhIpq][\-t#][start_directory] file_to_find
-@@ -110,8 +110,8 @@
+@@ -110,8 +110,8 @@ The directory to start the search. The current directory is the default.
  .PP
  The last argument to ftff is not parsed for options as the program needs
  at least one file-name argument. This means that 
@@ -46,16 +47,17 @@ diff -Nur whichman-2.4.old/man1/ftff.1 whichman-2.4/man1/ftff.1
  .SH EXAMPLE
  .I  ftff 
  .RB samething
-@@ -139,5 +139,5 @@
+@@ -139,5 +139,5 @@ normally hardly any file that has these characters in its name.
  .SH AUTHOR
  Guido Socher (guido@linuxfocus.org)
  .SH SEE ALSO
 -whichman(1) find(1)
 +.BR whichman "(1), " find (1)
  
-diff -Nur whichman-2.4.old/man1/ftwhich.1 whichman-2.4/man1/ftwhich.1
---- whichman-2.4.old/man1/ftwhich.1	2001-05-04 23:03:06.000000000 +0200
-+++ whichman-2.4/man1/ftwhich.1	2008-01-27 14:45:55.000000000 +0100
+diff --git a/man1/ftwhich.1 b/man1/ftwhich.1
+index ba4d203..0b149c5 100644
+--- a/man1/ftwhich.1
++++ b/man1/ftwhich.1
 @@ -2,7 +2,7 @@
  .\"     This is free software and distributed under the
  .\"     terms of the Gnu Public License.
@@ -65,7 +67,7 @@ diff -Nur whichman-2.4.old/man1/ftwhich.1 whichman-2.4/man1/ftwhich.1
  .SH NAME
  ftwhich \- fault tolerant search for a command name
  .SH SYNOPSIS
-@@ -15,7 +15,7 @@
+@@ -15,7 +15,7 @@ is a fault tolerant version of the which(1) command.
  searches for a given program in all directories included in your 
  PATH environment variable and reports all files with a name that approximately
  matches the given 
@@ -74,7 +76,7 @@ diff -Nur whichman-2.4.old/man1/ftwhich.1 whichman-2.4/man1/ftwhich.1
  .PP
  .B ftwhich
  achieves  fault tolerance  by calculating the  so called
-@@ -27,9 +27,9 @@
+@@ -27,9 +27,9 @@ a string
  into a string 
  .I B.
  .PP
@@ -82,11 +84,11 @@ diff -Nur whichman-2.4.old/man1/ftwhich.1 whichman-2.4/man1/ftwhich.1
 +.B ftwhich
  is similar to the
 -.I which 
-+.B which 
++.B which
  command with the following differences:
  .TP
  \- 
-@@ -40,15 +40,15 @@
+@@ -40,15 +40,15 @@ ftwhich is fault tolerant
  .TP
  \- 
  Some shells have a build in
@@ -95,8 +97,8 @@ diff -Nur whichman-2.4.old/man1/ftwhich.1 whichman-2.4/man1/ftwhich.1
  command that will also search aliases. 
 -.I ftwhich 
 -can naturaly not search for aliases as it does not know 
-+.B ftwhich 
-+can naturally not search for aliases as it does not know 
++.B ftwhich
++can naturally not search for aliases as it does not know
  about alias definitions. 
  .TP
  \- 
@@ -106,7 +108,7 @@ diff -Nur whichman-2.4.old/man1/ftwhich.1 whichman-2.4/man1/ftwhich.1
  shown take preference over files of the same name printed later as
  they are from directories listed earlier in the PATH.
  .TP
-@@ -93,8 +93,8 @@
+@@ -93,8 +93,8 @@ denotes an arbitrary number of characters.
  .PP
  The last argument to ftwhich is not parsed for options as the program needs
  at least one program_name argument. This means that 
@@ -117,16 +119,17 @@ diff -Nur whichman-2.4.old/man1/ftwhich.1 whichman-2.4/man1/ftwhich.1
  .SH EXAMPLE
  Search for all programs like gcc in your PATH:
  .br
-@@ -131,5 +131,5 @@
+@@ -131,5 +131,5 @@ normally hardly any command that has these characters in its name.
  .SH AUTHOR
  Guido Socher (guido@linuxfocus.org)
  .SH SEE ALSO
 -whichman(1) ftff(1)
 +.BR whichman "(1), " ftff (1)
  
-diff -Nur whichman-2.4.old/man1/whichman.1 whichman-2.4/man1/whichman.1
---- whichman-2.4.old/man1/whichman.1	2001-05-04 23:03:23.000000000 +0200
-+++ whichman-2.4/man1/whichman.1	2008-01-27 14:45:55.000000000 +0100
+diff --git a/man1/whichman.1 b/man1/whichman.1
+index f2111c1..799d4e7 100644
+--- a/man1/whichman.1
++++ b/man1/whichman.1
 @@ -2,7 +2,7 @@
  .\"     This is free software and only distributed under the
  .\"     terms of the Gnu Public License. Author: Guido Socher
@@ -136,7 +139,7 @@ diff -Nur whichman-2.4.old/man1/whichman.1 whichman-2.4/man1/whichman.1
  .SH NAME
  whichman \- show the location of a man page using a fault tolerant approximate matching algorithm
  .SH SYNOPSIS
-@@ -15,6 +15,10 @@
+@@ -15,6 +15,10 @@ is a "which" alike search command for man pages.
  searches the    
  .B MANPATH 
  environment variable. 
@@ -147,7 +150,7 @@ diff -Nur whichman-2.4.old/man1/whichman.1 whichman-2.4/man1/whichman.1
  .PP
  Unlike "which" this program does not stop on the first match. The name
  should probably have been something like whereman as this is not a
-@@ -51,7 +55,7 @@
+@@ -51,7 +55,7 @@ integer # in the range 0-255.  It specifies the maximum number of errors
  permitted in finding the approximate match.  A tolerance_level of zero
  allows exact matches only but does NOT disable the wildcards * and ?.
  .PP
@@ -156,7 +159,7 @@ diff -Nur whichman-2.4.old/man1/whichman.1 whichman-2.4/man1/whichman.1
  .TP 
  .BR '*'
  any arbitrary number of character
-@@ -61,19 +65,19 @@
+@@ -61,19 +65,19 @@ one character
  .PP
  The last argument to whichman is not parsed for options as the program needs
  at least one man-page-name argument. This means that 
@@ -181,35 +184,10 @@ diff -Nur whichman-2.4.old/man1/whichman.1 whichman-2.4/man1/whichman.1
  .SH BUGS
  The wildcards 
  .BR '?'
-@@ -85,4 +89,4 @@
+@@ -85,4 +89,4 @@ hardly any man-page that has these characters in its name.
  .SH AUTHOR
  Guido Socher (guido@linuxfocus.org)
  .SH SEE ALSO
 -ftff(1) man(1)
 +.BR ftff "(1), " man (1)
-diff -Nur whichman-2.4.old/README whichman-2.4/README
---- whichman-2.4.old/README	2004-04-15 04:21:05.000000000 +0200
-+++ whichman-2.4/README	2008-01-27 14:45:55.000000000 +0100
-@@ -44,7 +44,7 @@
- ftwhich -- a fault tolerant "which" command 
- 
- ftwhich finds files (programs) which are in one of the directories in 
--your PATH and uses a fault tolerant search algorithem.
-+your PATH and uses a fault tolerant search algorithm.
- 
- Example, search all clocks:
- > ftwhich -0 '*clock*'
-diff -Nur whichman-2.4.old/whichman.c whichman-2.4/whichman.c
---- whichman-2.4.old/whichman.c	2003-01-04 22:39:47.000000000 +0100
-+++ whichman-2.4/whichman.c	2008-01-27 14:45:55.000000000 +0100
-@@ -399,8 +399,8 @@
- 
- 	mpath = (char *) getenv("MANPATH");
- 	if (mpath == NULL || *mpath == '\0') {
--		fprintf(stderr,"Warning: MANPATH not defined, using /usr/man:/usr/share/man\n");
--                mpath="/usr/man:/usr/share/man";
-+/*		fprintf(stderr,"Warning: MANPATH not defined, using /usr/man:/usr/share/man\n"); */
-+                mpath="/usr/share/man:/usr/man:/usr/X11R6/man:/usr/local/man";
- 	}
-         /* make a copy that is static */
-         cmpath = (char *)malloc(sizeof(char)*(strlen(mpath) + 2));
+-- 

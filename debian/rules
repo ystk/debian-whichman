@@ -1,81 +1,22 @@
 #!/usr/bin/make -f
-# Sample debian/rules that uses debhelper.
-# This file is public domain software, originally written by Joey Hess. 
 
-# Uncomment this to turn on verbose mode.
-#export DH_VERBOSE=1
+DH_AUTO_OPTIONS := -v -Smakefile --parallel
+DESTDIR         := $(CURDIR)/debian/$(shell dh_listpackages)
+export CFLAGS   := $(shell dpkg-buildflags --get CFLAGS) -Wall -Wextra
 
-ifneq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))
-	CFLAGS = -Wall -g -O0
-else
-	CFLAGS = -Wall -g -O2
-endif
+%:
+	dh "$@"
 
-include /usr/share/quilt/quilt.make
+override_dh_auto_build:
+	rm -f .pc/.*unapply # see bug#649521
+	
+	dh_auto_build $(DH_AUTO_OPTIONS) -- \
+	                STRIP=: CFLAGS="$(CFLAGS)"
 
-build: patch build-stamp 
-build-stamp:
-	dh_testdir
+override_dh_auto_clean:
+	dh_auto_clean $(DH_AUTO_OPTIONS)
+	
+override_dh_auto_install:	
+	dh_auto_install $(DH_AUTO_OPTIONS) --destdir="$(DESTDIR)" -- \
+	                STRIP=: CFLAGS="$(CFLAGS)"
 
-	# Add here commands to compile the package.
-	$(MAKE) CFLAGS="$(CFLAGS)" STRIP=":"
-
-	touch build-stamp
-
-clean: unpatch
-	dh_testdir
-	dh_testroot
-	rm -f build-stamp
-
-	# Add here commands to clean up after the build process.
-	$(MAKE) clean
-
-	dh_clean
-
-install: build
-	dh_testdir
-	dh_testroot
-	dh_clean -k
-	dh_installdirs
-
-	# Add here commands to install the package into debian/<packagename>
-	$(MAKE) install CFLAGS="$(CFLAGS)" STRIP=":"	\
-			DESTDIR=$(CURDIR)/debian/$(shell dh_listpackages)
-
-# Build architecture-independent files here.
-binary-indep: build install
-# We have nothing to do by default.
-
-# Build architecture-dependent files here.
-binary-arch: build install
-	dh_testdir
-	dh_testroot
-	dh_installchangelogs
-	dh_installdocs
-#	dh_installexamples
-#	dh_install
-#	dh_installmenu
-#	dh_installdebconf	
-#	dh_installlogrotate
-#	dh_installemacsen
-#	dh_installpam
-#	dh_installmime
-#	dh_installinit
-#	dh_installcron
-#	dh_installinfo
-#	dh_undocumented
-#	dh_installman
-	dh_link
-	dh_strip
-	dh_compress
-	dh_fixperms
-#	dh_makeshlibs
-	dh_installdeb
-#	dh_perl
-	dh_shlibdeps
-	dh_gencontrol
-	dh_md5sums
-	dh_builddeb
-
-binary: binary-indep binary-arch
-.PHONY: build clean binary-indep binary-arch binary install

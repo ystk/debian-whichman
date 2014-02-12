@@ -1,0 +1,36 @@
+From: Robert Luberda <robert@debian.org>
+Date: Mon, 29 Jan 2001 20:31:00 +0100
+Subject: 00 Makefile.
+
+Upstream Makefile fixes.
+---
+ Makefile |    8 +++++---
+ 1 files changed, 5 insertions(+), 3 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 79beb49..8ab2933 100644
+--- a/Makefile
++++ b/Makefile
+@@ -9,6 +9,8 @@ CFLAGS= -Wall -O2
+ #sun c/c++-compiler:
+ #CC=CC
+ #CFLAGS= -O
++STRIP=strip
++
+ 
+ all:whichman ftff ftwhich
+ 
+@@ -31,9 +33,9 @@ levdist.o: levdist.c levdist.h
+ 	$(CC) $(CFLAGS) -c levdist.c
+ 
+ install: whichman ftff ftwhich $(MANP)
+-	strip whichman
+-	strip ftwhich
+-	strip ftff
++	$(STRIP) whichman
++	$(STRIP) ftwhich
++	$(STRIP) ftff
+ 	[ -d "$(prefix)/bin" ] || $(INSTALL) -d $(prefix)/bin
+ 	[ -d "$(mandir)/man1" ] || $(INSTALL) -d $(mandir)/man1
+ 	$(INSTALL) -m 755 whichman $(prefix)/bin
+-- 

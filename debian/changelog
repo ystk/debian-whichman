@@ -1,3 +1,32 @@
+whichman (2.4-7) unstable; urgency=low
+
+  * Switch to debhelper v9 and tiny rules file.
+  * Rename & refresh patches with gbp-pq import/export.
+  * Fix lintian's `spelling-error-in-copyright'.
+  * debian/rules: remove .pc/.dpkg-source-unapply file in rules.
+    This fixes broken behaviour of dpkg-buildpackage (see Bug#649521).
+  * debian/control:
+    + Standards-Version: 3.9.2 (no changes);
+    + add VCS fields;
+    + sort dependency fields with wrap-and-sort.
+
+ -- Robert Luberda <robert@debian.org>  Sun, 19 Feb 2012 16:05:46 +0100
+
+whichman (2.4-6) unstable; urgency=low
+
+  * Switch to the `3.0 (quilt)' format.
+  * Bump to debhelper v8.
+  * Standards-Version: 3.9.1 (no changes).
+  * Split the previous 01_debian.patch into 3 patches: 00_Makefile.patch,
+    01_documentation.patch, and 02_no_warn.patch.
+  * debian/rules:
+    + use dpkg-buildflags for getting CFLAGS/LDFLAGS (also added versioned
+      build-dependency on dpkg-dev for this);
+    + call dh_auto_{configure,build,clean} commands;
+    + provide build-{arch,indep} targets.
+
+ -- Robert Luberda <robert@debian.org>  Tue, 15 Feb 2011 22:29:25 +0100
+
 whichman (2.4-5) unstable; urgency=low
 
   * Add copyright notice (lintian),
