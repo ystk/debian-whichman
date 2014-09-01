@@ -4,8 +4,8 @@ Subject: 02 No warn.
 
 Don't warn about empty  MANPATH. Update man pages path for FHS.
 ---
- whichman.c |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ whichman.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/whichman.c b/whichman.c
 index 931c00d..586f57b 100644
@@ -22,4 +22,3 @@ index 931c00d..586f57b 100644
  	}
          /* make a copy that is static */
          cmpath = (char *)malloc(sizeof(char)*(strlen(mpath) + 2));
--- 

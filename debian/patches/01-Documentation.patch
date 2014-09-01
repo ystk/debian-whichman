@@ -4,10 +4,10 @@ Subject: 01 Documentation.
 
 Fix typos in documentation, update paths for FHS.
 ---
- README          |    2 +-
- man1/ftff.1     |    8 ++++----
- man1/ftwhich.1  |   22 +++++++++++-----------
- man1/whichman.1 |   20 ++++++++++++--------
+ README          |  2 +-
+ man1/ftff.1     |  8 ++++----
+ man1/ftwhich.1  | 22 +++++++++++-----------
+ man1/whichman.1 | 20 ++++++++++++--------
  4 files changed, 28 insertions(+), 24 deletions(-)
 
 diff --git a/README b/README
@@ -190,4 +190,3 @@ index f2111c1..799d4e7 100644
  .SH SEE ALSO
 -ftff(1) man(1)
 +.BR ftff "(1), " man (1)
--- 

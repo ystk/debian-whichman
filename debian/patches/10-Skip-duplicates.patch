@@ -4,11 +4,11 @@ Subject: 10 Skip duplicates.
 
 Patch for #452068: wanted: 'ftwhich' option to not print links or symlinks
 ---
- Makefile        |   10 ++++---
- ftwhich.c       |    9 +++++-
- statduplcheck.c |   80 +++++++++++++++++++++++++++++++++++++++++++++++++++++++
- statduplcheck.h |   11 +++++++
- whichman.c      |    5 +++-
+ Makefile        | 10 +++++---
+ ftwhich.c       |  9 +++++--
+ statduplcheck.c | 80 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ statduplcheck.h | 11 ++++++++
+ whichman.c      |  5 +++-
  5 files changed, 108 insertions(+), 7 deletions(-)
  create mode 100644 statduplcheck.c
  create mode 100644 statduplcheck.h
@@ -209,4 +209,3 @@ index 586f57b..5278397 100644
                                  if (printdist) printf("%03d ",d);
                                  printf("%s/%s\n", path, entry->d_name);
                                  nomanfilefound = 0;
--- 

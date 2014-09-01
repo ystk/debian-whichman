@@ -3,7 +3,8 @@ Section: utils
 Priority: optional
 Maintainer: Robert Luberda <robert@debian.org>
 Build-Depends: debhelper (>= 9)
-Standards-Version: 3.9.2
+Standards-Version: 3.9.5
+Homepage: http://linuxfocus.org/~guido/#whichman
 Vcs-Git: git://anonscm.debian.org/users/robert/whichman.git
 Vcs-Browser: http://anonscm.debian.org/gitweb/?p=users/robert/whichman.git
 
@@ -24,4 +25,3 @@ Description: Fault tolerant search utilities: whichman, ftff, ftwhich
  .
  ftwhich finds files which are in one of the directories in your PATH
  and uses a fault tolerant search algorithm.
-Homepage: http://linuxfocus.org/~guido/#whichman

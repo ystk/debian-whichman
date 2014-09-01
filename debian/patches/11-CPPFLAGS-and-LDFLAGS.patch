@@ -1,0 +1,55 @@
+From: Robert Luberda <robert@debian.org>
+Date: Sat, 14 Dec 2013 21:16:19 +0100
+Subject: 11 CPPFLAGS and LDFLAGS
+
+Pass CPPFLAGS and LDFLAGS to compiler
+---
+ Makefile | 18 +++++++++---------
+ 1 file changed, 9 insertions(+), 9 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 8f717ca..d583b51 100644
+--- a/Makefile
++++ b/Makefile
+@@ -15,24 +15,24 @@ STRIP=strip
+ all:whichman ftff ftwhich
+ 
+ whichman: whichman.o levdist.o statduplcheck.o
+-	$(CC) -o $@ whichman.o levdist.o statduplcheck.o
++	$(CC) $(LDFLAGS) -o $@ whichman.o levdist.o statduplcheck.o
+ 
+ ftwhich: ftwhich.o levdist.o statduplcheck.o
+-	$(CC) -o $@ ftwhich.o levdist.o statduplcheck.o
++	$(CC) $(LDFLAGS) -o $@ ftwhich.o levdist.o statduplcheck.o
+ 
+ ftff: ftff.o levdist.o 
+-	$(CC) -o $@ ftff.o levdist.o
++	$(CC) $(LDFLAGS) -o $@ ftff.o levdist.o
+ 
+ whichman.o: whichman.c 
+-	$(CC) $(CFLAGS) -c whichman.c
++	$(CC) $(CPPFLAGS) $(CFLAGS) -c whichman.c
+ ftwhich.o: ftwhich.c 
+-	$(CC) $(CFLAGS) -c ftwhich.c
++	$(CC) $(CPPFLAGS) $(CFLAGS) -c ftwhich.c
+ ftff.o: ftff.c 
+-	$(CC) $(CFLAGS) -c ftff.c
++	$(CC) $(CPPFLAGS) $(CFLAGS) -c ftff.c
+ levdist.o: levdist.c levdist.h
+-	$(CC) $(CFLAGS) -c levdist.c
++	$(CC) $(CPPFLAGS) $(CFLAGS) -c levdist.c
+ statduplcheck.o: statduplcheck.c statduplcheck.h
+-	$(CC) $(CFLAGS) -c statduplcheck.c
++	$(CC) $(CPPFLAGS) $(CFLAGS) -c statduplcheck.c
+ 
+ install: whichman ftff ftwhich $(MANP)
+ 	$(STRIP) whichman
+@@ -57,7 +57,7 @@ install_with_cp: whichman ftff ftwhich $(MANP)
+ 	cp $(MANP) $(mandir)/man1
+ 
+ debug: levdist.c
+-	$(CC) $(CFLAGS) -o levdebug -DDEBUG -DRETURNVALUE levdist.c
++	$(CC) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) -o levdebug -DDEBUG -DRETURNVALUE levdist.c
+ 
+ clean:
+ 	rm -f whichman ftff ftwhich *.o levdebug

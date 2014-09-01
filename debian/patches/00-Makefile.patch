@@ -4,8 +4,8 @@ Subject: 00 Makefile.
 
 Upstream Makefile fixes.
 ---
- Makefile |    8 +++++---
- 1 files changed, 5 insertions(+), 3 deletions(-)
+ Makefile | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
 diff --git a/Makefile b/Makefile
 index 79beb49..8ab2933 100644
@@ -33,4 +33,3 @@ index 79beb49..8ab2933 100644
  	[ -d "$(prefix)/bin" ] || $(INSTALL) -d $(prefix)/bin
  	[ -d "$(mandir)/man1" ] || $(INSTALL) -d $(mandir)/man1
  	$(INSTALL) -m 755 whichman $(prefix)/bin
--- 

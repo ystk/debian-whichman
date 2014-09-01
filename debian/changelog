@@ -1,3 +1,13 @@
+whichman (2.4-8) unstable; urgency=medium
+
+  * Add 11-CPPFLAGS-and-LDFLAGS.patch to pass the two variables
+    to compiler.
+  * Cleanup debian/rules, add support for cross-compiling, and
+    enable LFS support.
+  * Standards-Version: 3.9.5 (no changes).
+
+ -- Robert Luberda <robert@debian.org>  Sat, 14 Dec 2013 21:35:44 +0100
+
 whichman (2.4-7) unstable; urgency=low
 
   * Switch to debhelper v9 and tiny rules file.
